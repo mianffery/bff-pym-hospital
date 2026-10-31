@@ -28,10 +28,6 @@ USER node
 # Exponer puerto del servicio
 EXPOSE 3000
 
-# Healthcheck interno del contenedor
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
-
 # Comando de arranque
 CMD ["node", "server.js"]
 
