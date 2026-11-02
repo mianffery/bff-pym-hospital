@@ -14,6 +14,13 @@ const campanasRoutes = require('./routes/campanas');
 const app = express();
 
 // ========================================================
+// 🌐 CONFIGURACIÓN DE PROXY INVERSO (EASYPANEL / TRAEFIK)
+// Permite que express-rate-limit lea correctamente la IP real
+// desde 'X-Forwarded-For' sin lanzar ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+// ========================================================
+app.set('trust proxy', 1);
+
+// ========================================================
 // 🛡️ MIDDLEWARES DE SEGURIDAD Y CONFIGURACIÓN
 // ========================================================
 app.use(helmet());
@@ -29,6 +36,7 @@ const globalLimiter = rateLimit({
   max: 1000, // Máximo 1000 peticiones por ventana
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { xForwardedForHeader: false },
   message: {
     success: false,
     error: 'Límite de solicitudes excedido. Intente nuevamente más tarde.',
